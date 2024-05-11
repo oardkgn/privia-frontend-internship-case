@@ -1,5 +1,3 @@
-import zIndex from "@mui/material/styles/zIndex";
-
 export const styles = {
   mainContainerStyle: {
     backgroundColor: "white",
@@ -68,8 +66,8 @@ export const styles = {
     display: "flex",
     alignItems: "center",
     cursor: "pointer",
-    padding:"8px",
-    borderRadius:"4px",
+    padding: "8px",
+    borderRadius: "4px",
     transition: "all 0.15s ease-in",
     "&:hover": {
       backgroundColor: "#E6E6E6",
@@ -101,5 +99,28 @@ export const styles = {
     width: "30px",
     height: "30px",
     marginRight: "4px",
+  },
+  tableCellStyle: {
+    fontWeight: "600",
+    padding: "0",
+    textAlign: "left",
+    fontFamily: "Montserrat",
+  },
+  tableHeadCellStyle: {
+    padding:"0px"
+  },
+
+  tableCellIconStyle: {
+    cursor: "pointer",
+    color: "#82868C",
+    fontSize: "30px",
+    marginRight:"4px",
+    transition: "all 0.15s ease-in",
+    "&:hover": {
+      backgroundColor: "#E6E6E6",
+      opacity: 0.9,
+      borderRadius:"4px",
+      padding:"1px"
+    },
   },
 };

@@ -15,7 +15,7 @@ function ToolsBar() {
         <FormControl sx={{width:"100%", outline:"none "}} variant="standard">
           <Input
             placeholder="Search"
-            sx={{fontWeight: "500",fontFamily:"Montserrat", bgcolor:"#E6E6E6", borderRadius:"4px 4px 0px 0px", padding:"4px 30px 4px 10px ", fontSize:"14px" }}
+            sx={{fontWeight: "500",fontFamily:"Montserrat", bgcolor:"#F5F6F8", borderRadius:"4px 4px 0px 0px", padding:"8px 30px 8px 10px ", fontSize:"14px" }}
           />
         </FormControl>
       </Box>

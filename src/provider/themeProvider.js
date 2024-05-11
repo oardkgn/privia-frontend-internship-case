@@ -45,6 +45,76 @@ export const theme = createTheme({
             },
         },
     },
+    
+    MuiTableRow:{
+        styleOverrides: {
+            root: {
+                boxSizing: 'border-box',
+            },
+        },
+    },
+
+    MuiTableHead: {
+        styleOverrides: {
+            root: {
+                backgroundColor: "#F5F6F8",
+                fontWeight: 600,
+            },
+        },
+    },
+
+    MuiTableCell: {
+        styleOverrides: {
+            root: {
+                textAlign:"left",
+            },
+        },
+    },
+
+    MuiTablePagination: {
+        display: "flex",
+        alignItems: "center",
+        styleOverrides: {
+            toolbar: {
+                padding: '0'
+            },
+            displayedRows: {
+                display: "none",
+            },
+            spacer: {
+                display: "none",
+            },
+        },
+    },
+
+    MuiPaginationItem: {
+        styleOverrides: {
+            icon: {
+                fontSize: 24,
+                color: "#82868C"
+            },
+            page: {
+                fontSize: 13,
+                fontWeight: 600,
+                fontFamily: "Montserrat",
+                borderRadius: 8,
+                color: "#E3E6EB",
+                '&.Mui-selected': {
+                    color: "#fff",
+                    backgroundColor: "#2940D3",
+                },
+                '&.Mui-selected:hover': {
+                    backgroundColor: "#2940D3",
+                },
+                '&:hover': {
+                    color: "#fff",
+                    backgroundColor: "#E3E6EB",
+                },
+            },
+        },
+    },
+
+
   },
   
 });
