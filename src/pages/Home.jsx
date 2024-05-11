@@ -3,14 +3,14 @@ import Header from "../components/header/Header";
 import { Container } from "@mui/material";
 import { styles } from "../components/CustomStyles";
 import ToolsBar from "../components/tools_bar/ToolsBar";
-import UsersList from "../components/users_list/UsersList";
+import UsersTable from "../components/users_list/UsersTable"
 
 function Home() {
   return (
     <Container style={{padding:"0px"}} sx={styles.mainContainerStyle} maxWidth="lg">
       <Header />
       <ToolsBar />
-      <UsersList />
+      <UsersTable />
     </Container>
   );
 }

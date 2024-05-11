@@ -1,27 +1,16 @@
 import * as React from "react";
-import PropTypes from "prop-types";
-import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import { visuallyHidden } from "@mui/utils";
+import EnhancedTableHead from "./TableHead";
 import { Avatar, Pagination, Stack, TableFooter } from "@mui/material";
 import { styles } from "../CustomStyles";
 import { capitalizeFirstLetter } from "../utils";
@@ -100,128 +89,7 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-const headCells = [
-  {
-    id: "avatar",
-    numeric: false,
-    disablePadding: true,
-    label: "Avatar",
-  },
-  {
-    id: "name",
-    numeric: true,
-    disablePadding: false,
-    label: "Name",
-  },
-  {
-    id: "username",
-    numeric: true,
-    disablePadding: false,
-    label: "Username",
-  },
-  {
-    id: "email",
-    numeric: true,
-    disablePadding: false,
-    label: "Email",
-  },
-  {
-    id: "role",
-    numeric: true,
-    disablePadding: false,
-    label: "Role",
-  },
-  {
-    id: "edit",
-    numeric: true,
-    disablePadding: false,
-    label: "Edit",
-  },
-];
 
-function EnhancedTableHead(props) {
-  const {
-    onSelectAllClick,
-    order,
-    orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort,
-  } = props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
-
-  return (
-    <TableHead>
-      <TableRow>
-        <TableCell
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            height: "57px",
-            paddingInlineEnd: "20px",
-          }}
-          padding="checkbox"
-        >
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              "aria-label": "select all desserts",
-            }}
-          />
-          {numSelected > 0 && (
-            <Box sx={{ marginInlineStart: "-5px" }}>{numSelected}</Box>
-          )}
-        </TableCell>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            sortDirection={orderBy === headCell.id ? order : false}
-            sx={
-              headCell.id === "avatar"
-                ? { width: "8%" }
-                : headCell.id === "edit"
-                ? { width: "10%" }
-                : {}
-            }
-          >
-            {headCell.id === "avatar" || headCell.id === "edit" ? (
-              <Box>{headCell.label}</Box>
-            ) : (
-              <TableSortLabel
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : "asc"}
-                onClick={createSortHandler(headCell.id)}
-              >
-                {headCell.label}
-                {orderBy === headCell.id ? (
-                  <Box component="span" sx={visuallyHidden}>
-                    {order === "desc"
-                      ? "sorted descending"
-                      : "sorted ascending"}
-                  </Box>
-                ) : null}
-              </TableSortLabel>
-            )}
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-}
-
-EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-};
 
 export default function EnhancedTable() {
   const [order, setOrder] = React.useState("asc");
@@ -277,7 +145,7 @@ export default function EnhancedTable() {
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
-  // Avoid a layout jump when reaching the last page with empty rows.
+  
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
@@ -348,6 +216,7 @@ export default function EnhancedTable() {
               <TableRow>
                 {rows.length > 0 && (
                   <TablePagination
+                  
                     count={Math.ceil(rows.length / rowsPerPage)}
                     page={page - 1}
                     rowsPerPageOptions={[-1]}
@@ -355,7 +224,6 @@ export default function EnhancedTable() {
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
                     ActionsComponent={({ page, count }) => {
-                      console.log(page);
                       return (
                         <Stack spacing={2}>
                           <Pagination
@@ -367,6 +235,7 @@ export default function EnhancedTable() {
                       );
                     }}
                   />
+               
                 )}
               </TableRow>
             </TableFooter>

@@ -1,17 +1,19 @@
-import { useState } from "react";
-import PropTypes from 'prop-types';
+import { useEffect, useState } from "react";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { styles } from "../CustomStyles";
-
+import { useContext } from "react";
+import { TableContext } from "../../context/TableContext";
 
 export default function Navbar() {
-  const [value, setValue] = useState(0);
+  const {tableState,tableDispatch} = useContext(TableContext);
+  console.log(tableState);
+  const [value, setValue] = useState(tableState.filteredBy);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    tableDispatch({ type: "SET_FILTERED_BY", payload:newValue  })
   };
 
   return (
@@ -21,11 +23,11 @@ export default function Navbar() {
           value={value}
           onChange={handleChange}
         >
-          <Tab label="All Users"  />
-          <Tab label="Contributor"  />
-          <Tab label="Author"  />
-          <Tab label="Administrator"  />
-          <Tab label="Subscriber"  />
+         <Tab value="all" label="All Users" />
+        <Tab value="contributor" label="Contributor" />
+        <Tab value="author" label="Author" />
+        <Tab value="administrator" label="Administrator" />
+        <Tab value="subscriber" label="Subscriber" />
         </Tabs>
       </Box>
     </Box>
