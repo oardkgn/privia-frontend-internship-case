@@ -13,3 +13,15 @@ export const getUsers = async () => {
     }
 
 }
+
+export const createUser = async (payload) => {
+    const newUser = { ...payload }
+    try {
+        const response =  await api.post(`/users`, newUser)
+        return response
+
+    } catch (e) {
+        return false
+    }
+
+}

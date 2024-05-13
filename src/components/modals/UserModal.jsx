@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-
+import React, { useContext, useState } from "react";
 import {
   Box,
   Modal,
@@ -11,19 +10,25 @@ import {
   Radio,
   Select,
   FormControlLabel,
+  CircularProgress,
+  Alert,
   FormLabel,
   Input,
 } from "@mui/material";
 import { styles } from "../CustomStyles";
+import { createUser } from "../../api/api";
+import { AlertContext } from "../../context/AlertContext";
 
 // Define some styles for the modal
 
 const UserModal = ({ showUserModal, setShowUserModal, type }) => {
-  const [fullName, setFullName] = useState("");
-  const [userName, setUserName] = useState("");
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
-  const [selectedImage, setSelectedImage] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const {showAlert} = useContext(AlertContext);
 
   const handleClose = () => {
     setShowUserModal(false);
@@ -50,14 +55,22 @@ const UserModal = ({ showUserModal, setShowUserModal, type }) => {
   };
 
   const handleImageChange = (event) => {
-    setSelectedImage(event.target.value);
+    setAvatar(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
+    setLoading(true);
     event.preventDefault();
-    console.log({fullName,userName,email,role,selectedImage});
     if (type == "create") {
-      
+      try {
+        const response = await createUser({name,username,email,role,avatar});
+        setLoading(false);
+        setShowUserModal(false);
+        showAlert("success","User created successfully.")
+
+      } catch (error) {
+        console.error("Error creating user:", error);
+      }
     }
   };
 
@@ -76,21 +89,21 @@ const UserModal = ({ showUserModal, setShowUserModal, type }) => {
             onSubmit={handleSubmit}
           >
             <Input
-              value={fullName}
+              value={name}
               disableUnderline
               required
               placeholder="Full Name"
               sx={styles.usersModalInputStyle}
-              onChange={(e) => setFullName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               fullWidth
             />
             <Input
-              value={userName}
+              value={username}
               disableUnderline
               required
-              placeholder="Username"
+              placeholder="username"
               sx={styles.usersModalInputStyle}
-              onChange={(e) => setUserName(e.target.value)}
+              onChange={(e) => setUsername(e.target.value)}
               fullWidth
             />
             <Input
@@ -145,12 +158,12 @@ const UserModal = ({ showUserModal, setShowUserModal, type }) => {
                   justifyContent: "space-between",
                   width: "320px",
                 }}
-                value={selectedImage}
+                value={avatar}
                 onChange={handleImageChange}
               >
                 {profileImages.map((image) => {
                   let boxShadow = "";
-                  if (image.src == selectedImage) {
+                  if (image.src == avatar) {
                     boxShadow = "rgba(58, 98, 243, 0.8) 0px 5px 15px";
                   } else {
                     boxShadow = "rgba(0, 0, 0, 0.24) 0px 3px 8px";
@@ -192,9 +205,10 @@ const UserModal = ({ showUserModal, setShowUserModal, type }) => {
               sx={{ width: "fit-content", mx: "auto" }}
               variant="contained"
               color="primary"
+              disabled={loading}
               type="submit"
             >
-              <p style={{ textTransform: "capitalize" }}>{type} user</p>
+              {loading ? <CircularProgress sx={{paddingX:"10px",paddingY:"5px"}} />  : <p style={{ textTransform: "capitalize" }}>{type} user</p>}
             </Button>
           </form>
         </Box>

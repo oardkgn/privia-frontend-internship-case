@@ -25,17 +25,6 @@ import UserModal from "../modals/UserModal";
 import { useEffect } from "react";
 import { getUsers } from "../../api/api";
 
-function createData(id, avatar, name, username, email, role) {
-  return {
-    id,
-    avatar,
-    name,
-    username,
-    email,
-    role,
-  };
-}
-
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -147,17 +136,21 @@ export default function EnhancedTable() {
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <TableContainer>
-          <Table sx={{ minWidth: 1000 }} aria-labelledby="tableTitle">
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-            />
-            {rows.length != 0 ? (
+        {rows.length != 0 ? (
+          <TableContainer>
+            <Table
+              sx={{ minWidth: 1000,}}
+              aria-labelledby="tableTitle"
+            >
+              <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={handleSelectAllClick}
+                onRequestSort={handleRequestSort}
+                rowCount={rows.length}
+              />
+
               <TableBody>
                 {visibleRows.map((row, index) => {
                   const isItemSelected = isSelected(row.id);
@@ -203,36 +196,39 @@ export default function EnhancedTable() {
                   );
                 })}
               </TableBody>
-            ) : (
-              <Box>No users found.</Box>
-            )}
-            <TableFooter>
-              <TableRow>
-                {rows.length > 0 && (
-                  <TablePagination
-                    count={Math.ceil(rows.length / rowsPerPage)}
-                    page={page - 1}
-                    rowsPerPageOptions={[-1]}
-                    rowsPerPage={rowsPerPage}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                    ActionsComponent={({ page, count }) => {
-                      return (
-                        <Stack spacing={2}>
-                          <Pagination
-                            count={count}
-                            page={page + 1}
-                            onChange={handleChangePage}
-                          />
-                        </Stack>
-                      );
-                    }}
-                  />
-                )}
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </TableContainer>
+
+              <TableFooter>
+                <TableRow>
+                  {rows.length > 0 && (
+                    <TablePagination
+                      count={Math.ceil(rows.length / rowsPerPage)}
+                      page={page - 1}
+                      rowsPerPageOptions={[-1]}
+                      rowsPerPage={rowsPerPage}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                      ActionsComponent={({ page, count }) => {
+                        return (
+                          <Stack spacing={2}>
+                            <Pagination
+                              count={count}
+                              page={page + 1}
+                              onChange={handleChangePage}
+                            />
+                          </Stack>
+                        );
+                      }}
+                    />
+                  )}
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </TableContainer>
+        ) : (
+          <Box sx={{padding:"20px", color:"#636363",fontFamily:"Montserrat", borderBottom:"1px solid gray",textAlign:"center"}}>
+            No users found.
+          </Box>
+        )}
       </Paper>
       <UserModal
         type={"update"}

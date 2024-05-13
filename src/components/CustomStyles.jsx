@@ -150,5 +150,14 @@ export const styles = {
     color:"#636363",
     "& fieldset": { border: 'none' },
   },
+
+  alertBoxStyle:{
+    position: 'fixed',
+    bottom: '20px',
+    right: '20px',
+    width: '500px',
+    textAlign: 'center',
+    zIndex: '9999', 
+},
   
 };

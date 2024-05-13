@@ -105,7 +105,7 @@ export default function EnhancedTableHead(props) {
               >
                 {headCell.label}
                 {orderBy === headCell.id ? (
-                  <Box component="span" sx={visuallyHidden}>
+                  <Box component="span" sx={{display:"none"}}>
                     {order === "desc"
                       ? "sorted descending"
                       : "sorted ascending"}
