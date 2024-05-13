@@ -1,19 +1,25 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import Checkbox from "@mui/material/Checkbox";
+import {useState,useMemo} from "react";
+import {
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TablePagination,
+  TableFooter,
+  TableRow,
+  Pagination,
+  Avatar,
+  Stack,
+  Paper,
+  Checkbox
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import EnhancedTableHead from "./TableHead";
-import { Avatar, Pagination, Stack, TableFooter } from "@mui/material";
 import { styles } from "../CustomStyles";
 import { capitalizeFirstLetter } from "../utils";
+import UserModal from "../modals/UserModal";
 
 function createData(id, avatar, name, username, email, role) {
   return {
@@ -89,14 +95,13 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-
-
 export default function EnhancedTable() {
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("calories");
-  const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(1);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("calories");
+  const [selected, setSelected] = useState([]);
+  const [page, setPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [showUserModal, setShowUserModal] = useState(false);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -145,11 +150,10 @@ export default function EnhancedTable() {
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
-  
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  const visibleRows = React.useMemo(
+  const visibleRows = useMemo(
     () =>
       stableSort(rows, getComparator(order, orderBy)).slice(
         (page - 1) * rowsPerPage,
@@ -205,7 +209,7 @@ export default function EnhancedTable() {
                     <TableCell>{row.email}</TableCell>
                     <TableCell>{capitalizeFirstLetter(row.role)}</TableCell>
                     <TableCell>
-                      <EditIcon sx={styles.tableCellIconStyle} />
+                      <EditIcon onClick={() => setShowUserModal(true)} sx={styles.tableCellIconStyle} />  {/* Edit profile button */}
                       <DeleteIcon sx={styles.tableCellIconStyle} />
                     </TableCell>
                   </TableRow>
@@ -216,7 +220,6 @@ export default function EnhancedTable() {
               <TableRow>
                 {rows.length > 0 && (
                   <TablePagination
-                  
                     count={Math.ceil(rows.length / rowsPerPage)}
                     page={page - 1}
                     rowsPerPageOptions={[-1]}
@@ -235,13 +238,13 @@ export default function EnhancedTable() {
                       );
                     }}
                   />
-               
                 )}
               </TableRow>
             </TableFooter>
           </Table>
         </TableContainer>
       </Paper>
+      <UserModal type={"update"} showUserModal={showUserModal} setShowUserModal={setShowUserModal}/>
     </Box>
   );
 }

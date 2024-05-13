@@ -95,6 +95,23 @@ export const theme = createTheme({
         },
     },
 
+
+    MuiSelect: {
+      styleOverrides: {
+          root: {
+              fontFamily: "Montserrat",
+              fontSize: "13px",
+              fontWeight: 500,
+              height:"45px",
+              borderRadius: "8px",
+              color:"#636363",
+              marginBottom:"20px",
+              paddingLeft:"0px !important"
+          },
+      },
+  },
+    
+
     MuiPaginationItem: {
       styleOverrides: {
         icon: {

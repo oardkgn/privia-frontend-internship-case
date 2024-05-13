@@ -107,20 +107,48 @@ export const styles = {
     fontFamily: "Montserrat",
   },
   tableHeadCellStyle: {
-    padding:"0px"
+    padding: "0px",
   },
 
   tableCellIconStyle: {
     cursor: "pointer",
     color: "#82868C",
     fontSize: "30px",
-    marginRight:"4px",
+    marginRight: "4px",
     transition: "all 0.15s ease-in",
     "&:hover": {
       backgroundColor: "#E6E6E6",
       opacity: 0.9,
-      borderRadius:"4px",
-      padding:"1px"
+      borderRadius: "4px",
+      padding: "1px",
     },
   },
+
+  usersModalContainerStyle: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  usersModalBoxStyle: {
+    backgroundColor: "#ffffff",
+    borderRadius: "5px",
+    padding: "30px",
+    width: "320px",
+  },
+
+  usersModalInputStyle: {
+    marginBottom: "20px",
+    fontFamily: "Montserrat",
+    paddingX: "10px",
+    paddingY: "5px",
+    fontSize: "13px",
+    border:"2px solid #E3E3E3",
+    borderRadius:"10px",
+    fontSize:"500",
+    fontWeight:500,
+    color:"#636363",
+    "& fieldset": { border: 'none' },
+  },
+  
 };
