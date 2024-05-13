@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   Modal,
@@ -16,19 +16,21 @@ import {
   Input,
 } from "@mui/material";
 import { styles } from "../CustomStyles";
-import { createUser } from "../../api/api";
+import { createUser, getUser, updateUser } from "../../api/api";
 import { AlertContext } from "../../context/AlertContext";
+import { TableContext } from "../../context/TableContext";
 
 // Define some styles for the modal
 
-const UserModal = ({ showUserModal, setShowUserModal, type }) => {
+const UserModal = ({ showUserModal, setShowUserModal, type, id }) => {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
-  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
   const [avatar, setAvatar] = useState("");
-  const {showAlert} = useContext(AlertContext);
+  const [loading, setLoading] = useState(false);
+  const { showAlert } = useContext(AlertContext);
+  const { getUsersData } = useContext(TableContext);
 
   const handleClose = () => {
     setShowUserModal(false);
@@ -58,18 +60,61 @@ const UserModal = ({ showUserModal, setShowUserModal, type }) => {
     setAvatar(event.target.value);
   };
 
-  const handleSubmit = async(event) => {
+  const getUpdatedUser = async () => {
+    if (showUserModal) {
+      try {
+        const response = await getUser(id);
+        setName(response.name);
+        setUsername(response.username);
+        setEmail(response.email);
+        setRole(response.role);
+        setAvatar(response.avatar);
+      } catch (error) {
+        console.error("Error creating user:", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (type == "edit") {
+      getUpdatedUser();
+    }
+  }, [showUserModal]);
+
+  const handleSubmit = async (event) => {
     setLoading(true);
     event.preventDefault();
     if (type == "create") {
       try {
-        const response = await createUser({name,username,email,role,avatar});
+        const response = await createUser({
+          name,
+          username,
+          email,
+          role,
+          avatar,
+        });
         setLoading(false);
         setShowUserModal(false);
-        showAlert("success","User created successfully.")
-
+        showAlert("success", "User created successfully.");
+        getUsersData();
       } catch (error) {
         console.error("Error creating user:", error);
+      }
+    } else {
+      try {
+        const response = await updateUser(id, {
+          name,
+          username,
+          email,
+          role,
+          avatar,
+        });
+        setLoading(false);
+        setShowUserModal(false);
+        showAlert("success", "User updated successfully.");
+        getUsersData();
+      } catch (error) {
+        console.error("Error updating user:", error);
       }
     }
   };
@@ -127,7 +172,11 @@ const UserModal = ({ showUserModal, setShowUserModal, type }) => {
                 sx={styles.usersModalInputStyle}
                 inputProps={{ "aria-label": "Without label" }}
               >
-                <MenuItem sx={{ backgroundColor:"#E3E3E3",marginTop:"-8px"}} value="" disabled>
+                <MenuItem
+                  sx={{ backgroundColor: "#E3E3E3", marginTop: "-8px" }}
+                  value=""
+                  disabled
+                >
                   <em>Role</em>
                 </MenuItem>
                 {roles.map((roleOption) => (
@@ -208,7 +257,11 @@ const UserModal = ({ showUserModal, setShowUserModal, type }) => {
               disabled={loading}
               type="submit"
             >
-              {loading ? <CircularProgress sx={{paddingX:"10px",paddingY:"5px"}} />  : <p style={{ textTransform: "capitalize" }}>{type} user</p>}
+              {loading ? (
+                <CircularProgress sx={{ paddingX: "10px", paddingY: "5px" }} />
+              ) : (
+                <p style={{ textTransform: "capitalize" }}>{type} user</p>
+              )}
             </Button>
           </form>
         </Box>

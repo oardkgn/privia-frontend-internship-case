@@ -26,7 +26,7 @@ function Header() {
         <Box sx={{width:"20px", height:"20px"}} ><PlusIcon/></Box>
         <Text sx={styles.buttonTextsStyle}>Add New User</Text>
       </Button>
-      <UserModal type={"create"} showUserModal={showUserModal} setShowUserModal={setShowUserModal}/>
+      <UserModal type={"create"} id={null} showUserModal={showUserModal} setShowUserModal={setShowUserModal}/>
     </Box>
   );
 }

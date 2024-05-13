@@ -56,27 +56,15 @@ function stableSort(array, comparator) {
 
 export default function EnhancedTable() {
   const [order, setOrder] = useState("asc");
-  const [rows, setRows] = useState([]);
   const [orderBy, setOrderBy] = useState("calories");
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [showUserModal, setShowUserModal] = useState(false);
+  const [editingUserId, setEditingUserId] = useState(null);
   const {tableState, tableDispatch} = useContext(TableContext);
+  const [rows, setRows] = useState([]);
   const [selected, setSelected] = useState(tableState.selectedUsers);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getUsers();
-        setRows(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    
-    fetchData();
-  }, []);
-
+  
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -92,7 +80,7 @@ export default function EnhancedTable() {
     tableDispatch({ type: "SET_SELECTED_USERS", payload:[]  });
   };
 
-  const handleClick = (event, id) => {
+  const handleSelectClick = (event, id) => {
     const selectedIndex = tableState.selectedUsers.indexOf(id);
     let newSelected = [];
 
@@ -121,6 +109,13 @@ export default function EnhancedTable() {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
+
+  useEffect(() => {
+    if (tableState.users) {
+      setRows(tableState.users)
+    }
+  }, [tableState.users])
+  
 
   const isSelected = (id) => tableState.selectedUsers.indexOf(id) !== -1;
 
@@ -166,7 +161,7 @@ export default function EnhancedTable() {
                       <TableCell padding="checkbox">
                         <Checkbox
                           color="primary"
-                          onClick={(event) => handleClick(event, row.id)}
+                          onClick={(event) => handleSelectClick(event, row.id)}
                           checked={isItemSelected}
                           inputProps={{
                             "aria-labelledby": labelId,
@@ -186,7 +181,7 @@ export default function EnhancedTable() {
                       <TableCell>{capitalizeFirstLetter(row.role)}</TableCell>
                       <TableCell>
                         <EditIcon
-                          onClick={() => setShowUserModal(true)}
+                          onClick={() => {setShowUserModal(true);setEditingUserId(row.id)}}
                           sx={styles.tableCellIconStyle}
                         />{" "}
                         {/* Edit profile button */}
@@ -231,7 +226,8 @@ export default function EnhancedTable() {
         )}
       </Paper>
       <UserModal
-        type={"update"}
+        type={"edit"}
+        id={editingUserId}
         showUserModal={showUserModal}
         setShowUserModal={setShowUserModal}
       />
