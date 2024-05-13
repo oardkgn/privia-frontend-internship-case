@@ -1,5 +1,4 @@
 import { useState, useMemo, useContext } from "react";
-import axios from "axios";
 import {
   Box,
   Table,
@@ -26,6 +25,7 @@ import { useEffect } from "react";
 import { deleteSelectedUsers, deleteUser, getUsers } from "../../server/api";
 import { TableContext } from "../../context/TableContext";
 import { AlertContext } from "../../context/AlertContext";
+import DoubleCheck from "../DoubleCheck";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -66,6 +66,26 @@ export default function EnhancedTable() {
   const [showUserModal, setShowUserModal] = useState(false);
   const [editingUserId, setEditingUserId] = useState(null);
   const [users, setUsers] = useState([]);
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorElId, setAnchorElId] = useState(null);
+
+  const confirmedDelete = async(action) => {
+    console.log(action);
+    if (action) {
+      try {
+        const response = await deleteUser(action);
+        showAlert("success", "User deleted successfully.");
+        getUsersData();
+      } catch (error) {
+        console.error("Error deleting user:", error);
+      }
+    }
+    setAnchorEl(null);
+  };
+
+  const DCOpen = Boolean(anchorEl);
+  
   
   
   const handleRequestSort = (event, property) => {
@@ -113,14 +133,9 @@ export default function EnhancedTable() {
     setUsersPerPage(parseInt(event.target.value, 10));
   };
 
-  const handleUserDel = async(id) => {
-    try {
-      const response = await deleteUser(id);
-      showAlert("success", "User deleted successfully.");
-      getUsersData();
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
+  const userDelDC = async(event,id) => {
+    setAnchorEl(event.currentTarget);
+    setAnchorElId(id)
   }
 
   useEffect(() => {
@@ -202,7 +217,9 @@ export default function EnhancedTable() {
                           sx={styles.tableCellIconStyle}
                         />
                         {/* Del profile button */}
-                        <DeleteIcon onClick={() => handleUserDel(row.id)} sx={styles.tableCellIconStyle} />
+                        
+                        <DeleteIcon onClick={(event) => userDelDC(event,row.id)} sx={styles.tableCellIconStyle} />
+                        <DoubleCheck open={DCOpen} id={anchorElId} confirmedDelete={confirmedDelete} anchorEl={anchorEl} />
                       </TableCell>
                     </TableRow>
                   );

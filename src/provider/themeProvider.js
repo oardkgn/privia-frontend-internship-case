@@ -12,6 +12,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           display: "flex",
+          fontFamily: "Montserrat",
           gap: "8px",
           paddingInline: "24px",
           borderRadius: 4,
@@ -26,6 +27,8 @@ export const theme = createTheme({
         },
       },
     },
+
+    
     MuiTab: {
       styleOverrides: {
         root: {
@@ -38,10 +41,27 @@ export const theme = createTheme({
         },
       },
     },
+    MuiButtonBase: {
+      styleOverrides: {
+        root: {
+          display:"flex",
+          gap:"0px"
+        },
+      },
+    },
     MuiTextField: {
       styleOverrides: {
         root: {
           height: "30px",
+        },
+      },
+    },
+    MuiPopover: {
+      styleOverrides: {
+        paper: {
+          padding: "14px",
+          borderRadius:"5px",
+          fontFamily: "Montserrat",
         },
       },
     },

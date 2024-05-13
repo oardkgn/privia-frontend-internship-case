@@ -9,24 +9,37 @@ import { styles } from "../CustomStyles";
 import { TableContext } from "../../context/TableContext";
 import { deleteSelectedUsers } from "../../server/api";
 import { AlertContext } from "../../context/AlertContext";
+import DoubleCheck from "../DoubleCheck";
 
 function ToolsBar() {
   const [loading, setLoading] = useState(false);
   const { tableState, getUsersData, tableDispatch } = useContext(TableContext);
   const { showAlert } = useContext(AlertContext);
 
-  const handleSelectedUsersDel = async () => {
-    setLoading(true);
-    try {
-      const response = await deleteSelectedUsers(tableState.selectedUsers);
-      showAlert("success", "Users deleted successfully.");
-      getUsersData();
-      tableDispatch({ type: "SET_SELECTED_USERS", payload:[]  })
-      setLoading(false);
-    } catch (error) {
-      console.error("Error deleting selected users:", error);
-      setLoading(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const confirmedDelete = async(action) => {
+    if (action) {
+      setAnchorEl(null);
+      setLoading(true);
+      try {
+        const response = await deleteSelectedUsers(tableState.selectedUsers);
+        showAlert("success", "Users deleted successfully.");
+        getUsersData();
+        tableDispatch({ type: "SET_SELECTED_USERS", payload:[]  })
+        setLoading(false);
+      } catch (error) {
+        console.error("Error deleting selected users:", error);
+        setLoading(false);
+      }
     }
+    setAnchorEl(null);  
+  };
+
+  const DCOpen = Boolean(anchorEl);
+
+  const selectedUsersDelDC = async (event) => {
+    setAnchorEl(event.currentTarget); 
   };
 
   return (
@@ -54,7 +67,7 @@ function ToolsBar() {
       <Button
         disabled={loading || tableState.selectedUsers.length == 0}
         sx={styles.toolsBarDeleteBoxStyle}
-        onClick={() => handleSelectedUsersDel()}
+        onClick={(e) => selectedUsersDelDC(e)}
       >
         {loading ? (
           <CircularProgress sx={{ paddingX: "10px", paddingY: "5px" }} />
@@ -65,6 +78,7 @@ function ToolsBar() {
           </>
         )}
       </Button>
+      {anchorEl && <DoubleCheck open={DCOpen} id={-1} confirmedDelete={confirmedDelete} anchorEl={anchorEl} />}
     </Box>
   );
 }
