@@ -23,8 +23,9 @@ import { styles } from "../CustomStyles";
 import { capitalizeFirstLetter } from "../utils";
 import UserModal from "../modals/UserModal";
 import { useEffect } from "react";
-import { getUsers } from "../../api/api";
+import { deleteUser, getUsers } from "../../server/api";
 import { TableContext } from "../../context/TableContext";
+import { AlertContext } from "../../context/AlertContext";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -55,15 +56,18 @@ function stableSort(array, comparator) {
 }
 
 export default function EnhancedTable() {
+  const {tableState, tableDispatch, getUsersData} = useContext(TableContext);
+  const { showAlert } = useContext(AlertContext);
+
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("calories");
   const [page, setPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [usersPerPage, setUsersPerPage] = useState(10);
   const [showUserModal, setShowUserModal] = useState(false);
   const [editingUserId, setEditingUserId] = useState(null);
-  const {tableState, tableDispatch} = useContext(TableContext);
-  const [rows, setRows] = useState([]);
+  const [users, setUsers] = useState([]);
   const [selected, setSelected] = useState(tableState.selectedUsers);
+  
   
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -73,7 +77,7 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.id);
+      const newSelected = users.map((n) => n.id);
       tableDispatch({ type: "SET_SELECTED_USERS", payload:newSelected  })
       return;
     }
@@ -100,38 +104,48 @@ export default function EnhancedTable() {
   };
 
   const handleChangePage = (event, newPage) => {
-    if (newPage < 0 || newPage >= Math.ceil(rows.length / rowsPerPage) + 1) {
+    if (newPage < 0 || newPage >= Math.ceil(users.length / usersPerPage) + 1) {
       return;
     }
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+  const handleChangeusersPerPage = (event) => {
+    setUsersPerPage(parseInt(event.target.value, 10));
   };
+
+  const handleUserDel = async(id) => {
+    try {
+      const response = await deleteUser(id);
+      showAlert("success", "User deleted successfully.");
+      getUsersData();
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  }
 
   useEffect(() => {
     if (tableState.users) {
-      setRows(tableState.users)
+      setUsers(tableState.users)
     }
   }, [tableState.users])
   
 
   const isSelected = (id) => tableState.selectedUsers.indexOf(id) !== -1;
 
-  const visibleRows = useMemo(
+  const visibleusers = useMemo(
     () =>
-      stableSort(rows, getComparator(order, orderBy)).slice(
-        (page - 1) * rowsPerPage,
-        (page - 1) * rowsPerPage + rowsPerPage
+      stableSort(users, getComparator(order, orderBy)).slice(
+        (page - 1) * usersPerPage,
+        (page - 1) * usersPerPage + usersPerPage
       ),
-    [order, orderBy, page, rowsPerPage, rows]
+    [order, orderBy, page, usersPerPage, users]
   );
 
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        {rows.length != 0 ? (
+        {users.length != 0 ? (
           <TableContainer>
             <Table
               sx={{ minWidth: 1000,}}
@@ -143,11 +157,11 @@ export default function EnhancedTable() {
                 orderBy={orderBy}
                 onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
-                rowCount={rows.length}
+                rowCount={users.length}
               />
 
               <TableBody>
-                {visibleRows.map((row, index) => {
+                {visibleusers.map((row, index) => {
                   const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -180,12 +194,13 @@ export default function EnhancedTable() {
                       <TableCell>{row.email}</TableCell>
                       <TableCell>{capitalizeFirstLetter(row.role)}</TableCell>
                       <TableCell>
+                        {/* Edit profile button */}
                         <EditIcon
                           onClick={() => {setShowUserModal(true);setEditingUserId(row.id)}}
                           sx={styles.tableCellIconStyle}
-                        />{" "}
-                        {/* Edit profile button */}
-                        <DeleteIcon sx={styles.tableCellIconStyle} />
+                        />
+                        {/* Del profile button */}
+                        <DeleteIcon onClick={() => handleUserDel(row.id)} sx={styles.tableCellIconStyle} />
                       </TableCell>
                     </TableRow>
                   );
@@ -194,14 +209,14 @@ export default function EnhancedTable() {
 
               <TableFooter>
                 <TableRow>
-                  {rows.length > 0 && (
+                  {users.length > 0 && (
                     <TablePagination
-                      count={Math.ceil(rows.length / rowsPerPage)}
+                      count={Math.ceil(users.length / usersPerPage)}
                       page={page - 1}
                       rowsPerPageOptions={[-1]}
-                      rowsPerPage={rowsPerPage}
+                      rowsPerPage={usersPerPage}
                       onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
+                      onRowsPerPageChange={handleChangeusersPerPage}
                       ActionsComponent={({ page, count }) => {
                         return (
                           <Stack spacing={2}>

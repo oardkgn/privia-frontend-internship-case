@@ -51,3 +51,14 @@ export const updateUser = async (id, payload) => {
    
  
 }
+
+export const deleteUser = async (id) => {
+    try {
+        const response = await api.delete(`/users/${id}`).then(res => res.data)
+        return response
+    } catch (e) {
+        const response = e.response.data
+        return response
+    }
+
+}

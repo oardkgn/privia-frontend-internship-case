@@ -1,5 +1,5 @@
 import { createContext, useEffect, useReducer, useState } from "react";
-import { getUsers } from "../api/api";
+import { getUsers } from "../server/api";
 
 export const TableContext = createContext();
 

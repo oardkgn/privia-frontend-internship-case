@@ -16,7 +16,7 @@ import {
   Input,
 } from "@mui/material";
 import { styles } from "../CustomStyles";
-import { createUser, getUser, updateUser } from "../../api/api";
+import { createUser, getUser, updateUser } from "../../server/api";
 import { AlertContext } from "../../context/AlertContext";
 import { TableContext } from "../../context/TableContext";
 
