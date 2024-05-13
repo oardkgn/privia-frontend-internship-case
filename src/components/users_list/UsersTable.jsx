@@ -139,10 +139,10 @@ export default function EnhancedTable() {
   }
 
   useEffect(() => {
-    if (tableState.users) {
-      setUsers(tableState.users)
+    if (tableState.filteredUsers) {
+      setUsers(tableState.filteredUsers)
     }
-  }, [tableState.users])
+  }, [tableState.filteredUsers])
   
 
  
