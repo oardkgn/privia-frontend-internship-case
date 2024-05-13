@@ -117,6 +117,11 @@ const UserModal = ({ showUserModal, setShowUserModal, type, id }) => {
         console.error("Error updating user:", error);
       }
     }
+    setAvatar("");
+    setName("");
+    setUsername("");
+    setEmail("");
+    setRole("")
   };
 
   return (

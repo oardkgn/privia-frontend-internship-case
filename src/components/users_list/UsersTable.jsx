@@ -23,7 +23,7 @@ import { styles } from "../CustomStyles";
 import { capitalizeFirstLetter } from "../utils";
 import UserModal from "../modals/UserModal";
 import { useEffect } from "react";
-import { deleteUser, getUsers } from "../../server/api";
+import { deleteSelectedUsers, deleteUser, getUsers } from "../../server/api";
 import { TableContext } from "../../context/TableContext";
 import { AlertContext } from "../../context/AlertContext";
 
@@ -66,7 +66,6 @@ export default function EnhancedTable() {
   const [showUserModal, setShowUserModal] = useState(false);
   const [editingUserId, setEditingUserId] = useState(null);
   const [users, setUsers] = useState([]);
-  const [selected, setSelected] = useState(tableState.selectedUsers);
   
   
   const handleRequestSort = (event, property) => {
@@ -129,6 +128,9 @@ export default function EnhancedTable() {
       setUsers(tableState.users)
     }
   }, [tableState.users])
+  
+
+ 
   
 
   const isSelected = (id) => tableState.selectedUsers.indexOf(id) !== -1;

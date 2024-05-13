@@ -42,6 +42,8 @@ const TableContextProvider = ({ children }) => {
   useEffect(() => {
     getUsersData();
   }, []);
+
+  console.log(tableState);
   
   return (
     <TableContext.Provider value={{ tableState, tableDispatch, getUsersData }}>

@@ -62,3 +62,17 @@ export const deleteUser = async (id) => {
     }
 
 }
+
+export const deleteSelectedUsers = async (userIds) => {
+    try {
+        for (let i = 0; i < userIds.length; i++) {
+            await api.delete(`/users/${userIds[i]}`);
+            await new Promise(resolve => setTimeout(resolve, 1000)); 
+        }
+        return true
+        
+    } catch (e) {
+        return false
+    }
+
+}

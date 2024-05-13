@@ -120,7 +120,6 @@ export const styles = {
       backgroundColor: "#E6E6E6",
       opacity: 0.9,
       borderRadius: "4px",
-      padding: "1px",
     },
   },
 
