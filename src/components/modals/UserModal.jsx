@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import {
   Box,
   Modal,
@@ -55,6 +56,9 @@ const UserModal = ({ showUserModal, setShowUserModal, type }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log({fullName,userName,email,role,selectedImage});
+    if (type == "create") {
+      
+    }
   };
 
   return (

@@ -1,4 +1,5 @@
-import {useState,useMemo} from "react";
+import { useState, useMemo } from "react";
+import axios from "axios";
 import {
   Box,
   Table,
@@ -12,7 +13,8 @@ import {
   Avatar,
   Stack,
   Paper,
-  Checkbox
+  Checkbox,
+  Typography,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -20,6 +22,8 @@ import EnhancedTableHead from "./TableHead";
 import { styles } from "../CustomStyles";
 import { capitalizeFirstLetter } from "../utils";
 import UserModal from "../modals/UserModal";
+import { useEffect } from "react";
+import { getUsers } from "../../api/api";
 
 function createData(id, avatar, name, username, email, role) {
   return {
@@ -31,41 +35,6 @@ function createData(id, avatar, name, username, email, role) {
     role,
   };
 }
-
-const rows = [
-  createData(
-    1,
-    "/public/images/profile1.png",
-    "arda",
-    "arda12",
-    "arda@123.com",
-    "Student"
-  ),
-  createData(
-    2,
-    "/public/images/profile2.png",
-    "ege",
-    "ege12",
-    "ege@123.com",
-    "Student"
-  ),
-  createData(
-    3,
-    "/public/images/profile3.png",
-    "can",
-    "can12",
-    "Cupcake",
-    "Cupcake"
-  ),
-  createData(
-    4,
-    "/public/images/profile4.png",
-    "mal",
-    "mal12",
-    "Cupcake",
-    "Cupcake"
-  ),
-];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -97,11 +66,27 @@ function stableSort(array, comparator) {
 
 export default function EnhancedTable() {
   const [order, setOrder] = useState("asc");
+  const [rows, setRows] = useState([]);
   const [orderBy, setOrderBy] = useState("calories");
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [showUserModal, setShowUserModal] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getUsers();
+        setRows(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  console.log(rows);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -150,16 +135,13 @@ export default function EnhancedTable() {
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
   const visibleRows = useMemo(
     () =>
       stableSort(rows, getComparator(order, orderBy)).slice(
         (page - 1) * rowsPerPage,
         (page - 1) * rowsPerPage + rowsPerPage
       ),
-    [order, orderBy, page, rowsPerPage]
+    [order, orderBy, page, rowsPerPage, rows]
   );
 
   return (
@@ -175,47 +157,55 @@ export default function EnhancedTable() {
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
             />
-            <TableBody>
-              {visibleRows.map((row, index) => {
-                const isItemSelected = isSelected(row.id);
-                const labelId = `enhanced-table-checkbox-${index}`;
+            {rows.length != 0 ? (
+              <TableBody>
+                {visibleRows.map((row, index) => {
+                  const isItemSelected = isSelected(row.id);
+                  const labelId = `enhanced-table-checkbox-${index}`;
 
-                return (
-                  <TableRow
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row.id}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        color="primary"
-                        onClick={(event) => handleClick(event, row.id)}
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Avatar
-                        alt="User Avatar"
-                        src={row.avatar}
-                        sx={{ borderRadius: "4px" }}
-                      />
-                    </TableCell>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell>{row.username}</TableCell>
-                    <TableCell>{row.email}</TableCell>
-                    <TableCell>{capitalizeFirstLetter(row.role)}</TableCell>
-                    <TableCell>
-                      <EditIcon onClick={() => setShowUserModal(true)} sx={styles.tableCellIconStyle} />  {/* Edit profile button */}
-                      <DeleteIcon sx={styles.tableCellIconStyle} />
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
+                  return (
+                    <TableRow
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row.id}
+                      selected={isItemSelected}
+                    >
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          color="primary"
+                          onClick={(event) => handleClick(event, row.id)}
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Avatar
+                          alt="User Avatar"
+                          src={`../../public/images/${row.avatar}`}
+                          sx={{ borderRadius: "4px" }}
+                        />
+                      </TableCell>
+                      <TableCell>{row.name}</TableCell>
+                      <TableCell>{row.username}</TableCell>
+                      <TableCell>{row.email}</TableCell>
+                      <TableCell>{capitalizeFirstLetter(row.role)}</TableCell>
+                      <TableCell>
+                        <EditIcon
+                          onClick={() => setShowUserModal(true)}
+                          sx={styles.tableCellIconStyle}
+                        />{" "}
+                        {/* Edit profile button */}
+                        <DeleteIcon sx={styles.tableCellIconStyle} />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            ) : (
+              <Box>No users found.</Box>
+            )}
             <TableFooter>
               <TableRow>
                 {rows.length > 0 && (
@@ -244,7 +234,11 @@ export default function EnhancedTable() {
           </Table>
         </TableContainer>
       </Paper>
-      <UserModal type={"update"} showUserModal={showUserModal} setShowUserModal={setShowUserModal}/>
+      <UserModal
+        type={"update"}
+        showUserModal={showUserModal}
+        setShowUserModal={setShowUserModal}
+      />
     </Box>
   );
 }
