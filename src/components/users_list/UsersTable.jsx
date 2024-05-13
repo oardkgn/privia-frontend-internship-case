@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useContext } from "react";
 import axios from "axios";
 import {
   Box,
@@ -24,6 +24,7 @@ import { capitalizeFirstLetter } from "../utils";
 import UserModal from "../modals/UserModal";
 import { useEffect } from "react";
 import { getUsers } from "../../api/api";
+import { TableContext } from "../../context/TableContext";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -57,10 +58,11 @@ export default function EnhancedTable() {
   const [order, setOrder] = useState("asc");
   const [rows, setRows] = useState([]);
   const [orderBy, setOrderBy] = useState("calories");
-  const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [showUserModal, setShowUserModal] = useState(false);
+  const {tableState, tableDispatch} = useContext(TableContext);
+  const [selected, setSelected] = useState(tableState.selectedUsers);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,11 +73,9 @@ export default function EnhancedTable() {
         console.error("Error fetching data:", error);
       }
     };
-
+    
     fetchData();
   }, []);
-
-  console.log(rows);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -86,29 +86,29 @@ export default function EnhancedTable() {
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelected = rows.map((n) => n.id);
-      setSelected(newSelected);
+      tableDispatch({ type: "SET_SELECTED_USERS", payload:newSelected  })
       return;
     }
-    setSelected([]);
+    tableDispatch({ type: "SET_SELECTED_USERS", payload:[]  });
   };
 
   const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
+    const selectedIndex = tableState.selectedUsers.indexOf(id);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
+      newSelected = newSelected.concat(tableState.selectedUsers, id);
     } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
+      newSelected = newSelected.concat(tableState.selectedUsers.slice(1));
+    } else if (selectedIndex === tableState.selectedUsers.length - 1) {
+      newSelected = newSelected.concat(tableState.selectedUsers.slice(0, -1));
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
+        tableState.selectedUsers.slice(0, selectedIndex),
+        tableState.selectedUsers.slice(selectedIndex + 1)
       );
     }
-    setSelected(newSelected);
+    tableDispatch({ type: "SET_SELECTED_USERS", payload:newSelected  })
   };
 
   const handleChangePage = (event, newPage) => {
@@ -122,7 +122,7 @@ export default function EnhancedTable() {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
+  const isSelected = (id) => tableState.selectedUsers.indexOf(id) !== -1;
 
   const visibleRows = useMemo(
     () =>
@@ -143,7 +143,7 @@ export default function EnhancedTable() {
               aria-labelledby="tableTitle"
             >
               <EnhancedTableHead
-                numSelected={selected.length}
+                numSelected={tableState.selectedUsers.length}
                 order={order}
                 orderBy={orderBy}
                 onSelectAllClick={handleSelectAllClick}

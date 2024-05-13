@@ -12,7 +12,6 @@ const AlertModal = () => {
     }, 3000);
   }, [alert]);
 
-  console.log(alert);
 
   return (
     <>

@@ -8,7 +8,6 @@ import { TableContext } from "../../context/TableContext";
 
 export default function Navbar() {
   const {tableState,tableDispatch} = useContext(TableContext);
-  console.log(tableState);
   const [value, setValue] = useState(tableState.filteredBy);
 
   const handleChange = (event, newValue) => {
