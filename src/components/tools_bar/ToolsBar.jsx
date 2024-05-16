@@ -10,15 +10,17 @@ import { TableContext } from "../../context/TableContext";
 import { deleteSelectedUsers } from "../../server/api";
 import { AlertContext } from "../../context/AlertContext";
 import DoubleCheck from "../DoubleCheck";
+import { useEffect } from "react";
 
 function ToolsBar() {
+  const [searchText, setSearchText] = useState("");
   const [loading, setLoading] = useState(false);
   const { tableState, getUsersData, tableDispatch } = useContext(TableContext);
   const { showAlert } = useContext(AlertContext);
 
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const confirmedDelete = async(action) => {
+  const confirmedDelete = async (action) => {
     if (action) {
       setAnchorEl(null);
       setLoading(true);
@@ -26,44 +28,55 @@ function ToolsBar() {
         const response = await deleteSelectedUsers(tableState.selectedUsers);
         showAlert("success", "Users deleted successfully.");
         getUsersData();
-        tableDispatch({ type: "SET_SELECTED_USERS", payload:[]  })
+        tableDispatch({ type: "SET_SELECTED_USERS", payload: [] });
         setLoading(false);
       } catch (error) {
         console.error("Error deleting selected users:", error);
         setLoading(false);
       }
     }
-    setAnchorEl(null);  
+    setAnchorEl(null);
   };
 
   const DCOpen = Boolean(anchorEl);
 
   const selectedUsersDelDC = async (event) => {
-    setAnchorEl(event.currentTarget); 
+    setAnchorEl(event.currentTarget);
   };
+
+  useEffect(() => {
+    tableDispatch({ type: "SET_SEARCHING_TERM", payload:searchText  })
+  }, [searchText])
+  
 
   return (
     <Box sx={styles.toolsBarContainerStyle}>
-      <Box sx={styles.toolsBarInnerBoxStyle}>
-        <SearchIcon sx={styles.toolsBarSearchIconStyle} />
-        <FormControl
-          sx={{ width: "100%", outline: "none " }}
-          variant="standard"
-        >
-          <Input
-            placeholder="Search"
-            disableUnderline
-            sx={{
-              fontWeight: "500",
-              fontFamily: "Montserrat",
-              bgcolor: "#F5F6F8",
-              borderRadius: "5px",
-              padding: "8px 30px 8px 10px ",
-              fontSize: "14px",
-            }}
-          />
-        </FormControl>
-      </Box>
+        <Box sx={styles.toolsBarInnerBoxStyle}>
+          <SearchIcon sx={styles.toolsBarSearchIconStyle} />
+
+          <FormControl
+            sx={{ width: "100%", outline: "none " }}
+            variant="standard"
+          >
+            <Input
+              placeholder="Search"
+              disableUnderline
+              onChange={(e) => {
+                setSearchText(e.target.value);
+              }}
+              value={searchText}
+              sx={{
+                fontWeight: "500",
+                fontFamily: "Montserrat",
+                bgcolor: "#F5F6F8",
+                borderRadius: "5px",
+                padding: "8px 30px 8px 10px ",
+                fontSize: "14px",
+              }}
+            />
+          </FormControl>
+        </Box>
+   
       <Button
         disabled={loading || tableState.selectedUsers.length == 0}
         sx={styles.toolsBarDeleteBoxStyle}
@@ -78,7 +91,14 @@ function ToolsBar() {
           </>
         )}
       </Button>
-      {anchorEl && <DoubleCheck open={DCOpen} id={-1} confirmedDelete={confirmedDelete} anchorEl={anchorEl} />}
+      {anchorEl && (
+        <DoubleCheck
+          open={DCOpen}
+          id={-1}
+          confirmedDelete={confirmedDelete}
+          anchorEl={anchorEl}
+        />
+      )}
     </Box>
   );
 }

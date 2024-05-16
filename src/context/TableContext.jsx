@@ -6,7 +6,7 @@ export const TableContext = createContext();
 const TableContextProvider = ({ children }) => {
   let initialState = {
     users: [],
-    filteredUsers:[],
+    filteredUsers: [],
     filteredBy: "all",
     searchingTerm: "",
     selectedUsers: [],
@@ -21,6 +21,8 @@ const TableContextProvider = ({ children }) => {
     switch (action.type) {
       case "SET_FILTERED_BY":
         return { ...state, filteredBy: action.payload };
+      case "SET_SEARCHING_TERM":
+        return { ...state, searchingTerm: action.payload };
       case "SET_SELECTED_USERS":
         return { ...state, selectedUsers: action.payload };
       case "SET_USERS":
@@ -33,9 +35,9 @@ const TableContextProvider = ({ children }) => {
   const [tableState, tableDispatch] = useReducer(reducer, initialState);
 
   const getUsersData = async () => {
-    const response = await getUsers();
-    tableDispatch({ type: "SET_USERS", payload: response.data });
-    tableDispatch({ type: "SET_FILTERED_USERS", payload: response.data });
+    const users = await getUsers();
+    tableDispatch({ type: "SET_USERS", payload: users.data });
+    getFilteredData(users.data);
   };
 
   useEffect(() => {
@@ -46,14 +48,33 @@ const TableContextProvider = ({ children }) => {
     getUsersData();
   }, []);
 
-  useEffect(() => {
-    const filteredUsers = tableState.users.filter((user) =>
-      tableState.filteredBy === "all" ? user : user.role === tableState.filteredBy
-    );
-    tableDispatch({ type: "SET_FILTERED_USERS", payload: filteredUsers });
-  }, [tableState.filteredBy]);
 
-  console.log(tableState);
+  const getFilteredData = (users) => { 
+    if (users) {
+      const filteredUsers = users.filter((user) =>
+        tableState.filteredBy === "all"
+          ? user.username
+              .toLowerCase()
+              .includes(tableState.searchingTerm.toLowerCase()) ||
+            user.email
+              .toLowerCase()
+              .includes(tableState.searchingTerm.toLowerCase())
+          : user.role === tableState.filteredBy &&
+            (user.username
+              .toLowerCase()
+              .includes(tableState.searchingTerm.toLowerCase()) ||
+              user.email
+                .toLowerCase()
+                .includes(tableState.searchingTerm.toLowerCase()))
+      );
+    
+      tableDispatch({ type: "SET_FILTERED_USERS", payload: filteredUsers });
+    }
+  };
+
+  useEffect(() => {
+    getFilteredData();
+  }, [tableState.filteredBy, tableState.searchingTerm]);
 
   return (
     <TableContext.Provider value={{ tableState, tableDispatch, getUsersData }}>

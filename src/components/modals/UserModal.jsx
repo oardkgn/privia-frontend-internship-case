@@ -246,7 +246,7 @@ const UserModal = ({ showUserModal, setShowUserModal, type, id }) => {
                             top: "0px",
                             backgroundColor: "white",
                           }}
-                          src={`../../public/images/${image.src}`}
+                          src={`/images/${image.src}`}
                           alt={`Image ${image.id}`}
                         />
                       }

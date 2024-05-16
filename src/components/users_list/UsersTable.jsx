@@ -70,11 +70,10 @@ export default function EnhancedTable() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorElId, setAnchorElId] = useState(null);
 
-  const confirmedDelete = async(action) => {
-    console.log(action);
-    if (action) {
+  const confirmedDelete = async(actionId) => {
+    if (actionId) {
       try {
-        const response = await deleteUser(action);
+        const response = await deleteUser(actionId);
         showAlert("success", "User deleted successfully.");
         getUsersData();
       } catch (error) {
@@ -133,7 +132,7 @@ export default function EnhancedTable() {
     setUsersPerPage(parseInt(event.target.value, 10));
   };
 
-  const userDelDC = async(event,id) => {
+  const userDelDoubleCheck = async(event,id) => {
     setAnchorEl(event.currentTarget);
     setAnchorElId(id)
   }
@@ -218,7 +217,7 @@ export default function EnhancedTable() {
                         />
                         {/* Del profile button */}
                         
-                        <DeleteIcon onClick={(event) => userDelDC(event,row.id)} sx={styles.tableCellIconStyle} />
+                        <DeleteIcon onClick={(event) => userDelDoubleCheck(event,row.id)} sx={styles.tableCellIconStyle} />
                         <DoubleCheck open={DCOpen} id={anchorElId} confirmedDelete={confirmedDelete} anchorEl={anchorEl} />
                       </TableCell>
                     </TableRow>
