@@ -73,7 +73,7 @@ const TableContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    getFilteredData();
+    getFilteredData(tableState.users);
   }, [tableState.filteredBy, tableState.searchingTerm]);
 
   return (

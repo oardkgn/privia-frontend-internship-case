@@ -25,7 +25,7 @@ import { useEffect } from "react";
 import { deleteSelectedUsers, deleteUser, getUsers } from "../../server/api";
 import { TableContext } from "../../context/TableContext";
 import { AlertContext } from "../../context/AlertContext";
-import DoubleCheck from "../DoubleCheck";
+import DoubleCheck from "../DoubleCheckPopup";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -57,6 +57,7 @@ function stableSort(array, comparator) {
 
 export default function EnhancedTable() {
   const {tableState, tableDispatch, getUsersData} = useContext(TableContext);
+  const {loading, setLoading} = useContext(AlertContext);
   const { showAlert } = useContext(AlertContext);
 
   const [order, setOrder] = useState("asc");
@@ -64,11 +65,13 @@ export default function EnhancedTable() {
   const [page, setPage] = useState(1);
   const [usersPerPage, setUsersPerPage] = useState(10);
   const [showUserModal, setShowUserModal] = useState(false);
+
   const [editingUserId, setEditingUserId] = useState(null);
   const [users, setUsers] = useState([]);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorElId, setAnchorElId] = useState(null);
+  console.log(tableState);
 
   const confirmedDelete = async(actionId) => {
     if (actionId) {
@@ -162,8 +165,10 @@ export default function EnhancedTable() {
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
         {users.length != 0 ? (
-          <TableContainer>
+          <TableContainer sx={{ position:"relative"}}>
+            {loading && <Box sx={{ zIndex:10 ,position:"absolute", width:"100%", height:"100%", bgcolor:"black", opacity:"30%"}}></Box>}
             <Table
+              
               sx={{ minWidth: 1000,}}
               aria-labelledby="tableTitle"
             >

@@ -5,7 +5,7 @@ import { styles } from "../components/CustomStyles";
 import ToolsBar from "../components/tools_bar/ToolsBar";
 import UsersTable from "../components/users_list/UsersTable"
 import AlertModal from "../components/AlertModal";
-import DoubleCheck from "../components/DoubleCheck";
+import DoubleCheckPopup from "../components/DoubleCheckPopup";
 
 function Home() {
   
@@ -15,7 +15,7 @@ function Home() {
       <ToolsBar />
       <UsersTable />
       <AlertModal />
-      <DoubleCheck />
+      <DoubleCheckPopup />
     </Container>
   );
 }

@@ -9,13 +9,13 @@ import { styles } from "../CustomStyles";
 import { TableContext } from "../../context/TableContext";
 import { deleteSelectedUsers } from "../../server/api";
 import { AlertContext } from "../../context/AlertContext";
-import DoubleCheck from "../DoubleCheck";
+import DoubleCheck from "../DoubleCheckPopup";
 import { useEffect } from "react";
 
 function ToolsBar() {
   const [searchText, setSearchText] = useState("");
-  const [loading, setLoading] = useState(false);
   const { tableState, getUsersData, tableDispatch } = useContext(TableContext);
+  const { loading, setLoading } = useContext(AlertContext);
   const { showAlert } = useContext(AlertContext);
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -40,7 +40,7 @@ function ToolsBar() {
 
   const DCOpen = Boolean(anchorEl);
 
-  const selectedUsersDelDC = async (event) => {
+  const selectedUsersDelDoubleControl = async (event) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -80,7 +80,7 @@ function ToolsBar() {
       <Button
         disabled={loading || tableState.selectedUsers.length == 0}
         sx={styles.toolsBarDeleteBoxStyle}
-        onClick={(e) => selectedUsersDelDC(e)}
+        onClick={(e) => selectedUsersDelDoubleControl(e)}
       >
         {loading ? (
           <CircularProgress sx={{ paddingX: "10px", paddingY: "5px" }} />

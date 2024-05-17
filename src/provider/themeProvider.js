@@ -61,6 +61,7 @@ export const theme = createTheme({
         paper: {
           padding: "14px",
           borderRadius:"5px",
+          boxShadow:"rgba(0, 0, 0, 0.24) 0px 3px 8px !important",
           fontFamily: "Montserrat",
         },
       },
@@ -95,7 +96,7 @@ export const theme = createTheme({
     MuiTablePagination: {
       styleOverrides: {
         toolbar: {
-          padding: "0",
+          padding: "0px !important",
         },
         displayedRows: {
           display: "none",
@@ -110,7 +111,13 @@ export const theme = createTheme({
         styleOverrides: {
             root: {
                 display: "flex",
-                justifyContent: "center",
+                justifyContent: "left",
+                marginLeft:"20px",
+                "@media (min-width: 850px)": {
+                  justifyContent: "center",
+                  fontSize:"13px",
+                  paddingX:"16px"
+                },
             },
         },
     },

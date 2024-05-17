@@ -13,7 +13,7 @@ const DoubleCheck = ({ open, id, confirmedDelete, anchorEl }) => {
       onClose={() => confirmedDelete(null)}
       anchorOrigin={{
         vertical: "bottom",
-        horizontal: "left",
+        horizontal: "right",
       }}
       transformOrigin={{
         vertical: "top",

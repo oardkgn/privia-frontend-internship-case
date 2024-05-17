@@ -22,11 +22,11 @@ export default function Navbar() {
           value={value}
           onChange={handleChange}
         >
-         <Tab value="all" label="All Users" />
-        <Tab value="contributor" label="Contributor" />
-        <Tab value="author" label="Author" />
-        <Tab value="administrator" label="Administrator" />
-        <Tab value="subscriber" label="Subscriber" />
+         <Tab sx={styles.headerTabsButtonsStyle} value="all" label="All Users" />
+        <Tab sx={styles.headerTabsButtonsStyle} value="contributor" label="Contributor" />
+        <Tab sx={styles.headerTabsButtonsStyle} value="author" label="Author" />
+        <Tab sx={styles.headerTabsButtonsStyle} value="administrator" label="Administrator" />
+        <Tab sx={styles.headerTabsButtonsStyle} value="subscriber" label="Subscriber" />
         </Tabs>
       </Box>
     </Box>

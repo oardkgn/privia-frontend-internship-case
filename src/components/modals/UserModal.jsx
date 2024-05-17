@@ -34,6 +34,13 @@ const UserModal = ({ showUserModal, setShowUserModal, type, id }) => {
 
   const handleClose = () => {
     setShowUserModal(false);
+    if (type == "edit") {
+      setAvatar("");
+      setName("");
+      setUsername("");
+      setEmail("");
+      setRole("");
+    }
   };
 
   const roles = [
@@ -78,6 +85,7 @@ const UserModal = ({ showUserModal, setShowUserModal, type, id }) => {
   useEffect(() => {
     if (type == "edit") {
       getUpdatedUser();
+      setLoading(false);
     }
   }, [showUserModal]);
 
@@ -121,7 +129,7 @@ const UserModal = ({ showUserModal, setShowUserModal, type, id }) => {
     setName("");
     setUsername("");
     setEmail("");
-    setRole("")
+    setRole("");
   };
 
   return (
@@ -263,7 +271,7 @@ const UserModal = ({ showUserModal, setShowUserModal, type, id }) => {
               type="submit"
             >
               {loading ? (
-                <CircularProgress sx={{ paddingX: "10px", paddingY: "5px" }} />
+                <CircularProgress size={24} sx={{ paddingX: "10px", paddingY: "5px" }} />
               ) : (
                 <p style={{ textTransform: "capitalize" }}>{type} user</p>
               )}

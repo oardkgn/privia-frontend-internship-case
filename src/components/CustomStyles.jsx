@@ -1,6 +1,7 @@
 export const styles = {
   mainContainerStyle: {
     backgroundColor: "white",
+    width: "100%",
     borderRadius: 1,
     marginTop: 1,
   },
@@ -12,11 +13,13 @@ export const styles = {
     paddingX: "14px",
     paddingY: "12px",
     borderBottom: "2px solid #EEEEEE",
+    flexWrap: "wrap",
   },
   headerLeftInnerboxStyle: {
     display: "flex",
     alignItems: "center",
     gap: 1,
+    flex: "0 1 auto",
   },
   headerIconBoxStyle: {
     display: "flex",
@@ -36,10 +39,30 @@ export const styles = {
   },
   headerNavbarBoxStyle: {
     position: "relative",
+    order: 2,
     width: "100%",
     height: "40px",
     display: "flex",
     justifyContent: "center",
+    "@media (min-width: 850px)": {
+      width: "auto",
+      flex: 1,
+      flexBasis: "auto",
+      order: 0,
+    },
+  },
+  headerTabsButtonsStyle: {
+    
+    minWidth:"70px",
+    paddingX:"4px",
+    fontSize:"9px",
+    marginTop:"6px !important",
+    "@media (min-width: 850px)": {
+      
+      fontSize:"13px",
+      paddingX:"16px",
+      paddingButton:"24px"
+    },
   },
   buttonTextsStyle: {
     fontFamily: "Montserrat",
@@ -67,6 +90,8 @@ export const styles = {
     alignItems: "center",
     cursor: "pointer",
     padding: "8px",
+    marginLeft:"10px",
+    gap:"0px",
     borderRadius: "4px",
     transition: "all 0.15s ease-in",
     "&:hover": {
@@ -161,9 +186,9 @@ export const styles = {
   DCcancelButtonStyle: {
     backgroundColor: "rgb(68, 184, 39, 0.4)",
     color: "#44b827",
-    display:"flex",
-    alignItems:"center",
-    gap:"4px",
+    display: "flex",
+    alignItems: "center",
+    gap: "4px",
     textTransform: "capitalize",
     "&:hover": {
       backgroundColor: "rgb(68, 184, 39, 0.8)",
@@ -173,9 +198,9 @@ export const styles = {
   DCdeleteButtonStyle: {
     backgroundColor: "rgb(224, 40, 40, 0.4)",
     color: "#e02828",
-    display:"flex",
-    alignItems:"center",
-    gap:"4px",
+    display: "flex",
+    alignItems: "center",
+    gap: "4px",
     textTransform: "capitalize",
 
     "&:hover": {
