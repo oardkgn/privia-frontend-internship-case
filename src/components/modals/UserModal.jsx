@@ -228,7 +228,7 @@ const UserModal = ({ showUserModal, setShowUserModal, type, id }) => {
                   if (image.src == avatar) {
                     boxShadow = "rgba(58, 98, 243, 0.8) 0px 5px 15px";
                   } else {
-                    boxShadow = "rgba(0, 0, 0, 0.24) 0px 3px 8px";
+                    boxShadow = "none";
                   }
                   return (
                     <FormControlLabel

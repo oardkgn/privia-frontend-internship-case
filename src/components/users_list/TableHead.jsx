@@ -66,7 +66,7 @@ export default function EnhancedTableHead(props) {
             display: "flex",
             alignItems: "center",
             height: "57px",
-            paddingInlineEnd: "20px",
+            paddingInlineStart: "8px",
           }}
           padding="checkbox"
         >

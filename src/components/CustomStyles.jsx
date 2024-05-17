@@ -58,7 +58,8 @@ export const styles = {
     fontSize:"9px",
     marginTop:"6px !important",
     "@media (min-width: 850px)": {
-      
+      minWidth:"90px",
+      marginTop:"0px !important",
       fontSize:"13px",
       paddingX:"16px",
       paddingButton:"24px"
