@@ -22,7 +22,7 @@ function Header() {
 
       <Navbar />
 
-      <Button sx={{ marginLeft:"auto"}} onClick={() => {setShowUserModal(true)}} variant="contained">
+      <Button sx={{ marginLeft:"0px"}} onClick={() => {setShowUserModal(true)}} variant="contained">
         <Box sx={{width:"20px", height:"20px"}} ><PlusIcon/></Box>
         <Text sx={styles.buttonTextsStyle}>Add New User</Text>
       </Button>

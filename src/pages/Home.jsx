@@ -4,7 +4,7 @@ import {Container } from "@mui/material";
 import { styles } from "../components/CustomStyles";
 import ToolsBar from "../components/tools_bar/ToolsBar";
 import UsersTable from "../components/users_list/UsersTable"
-import AlertModal from "../components/AlertModal";
+import AlertModal from "../components/modals/AlertModal";
 import DoubleCheckPopup from "../components/DoubleCheckPopup";
 
 function Home() {

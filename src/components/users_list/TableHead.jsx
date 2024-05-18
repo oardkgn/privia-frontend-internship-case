@@ -72,6 +72,7 @@ export default function EnhancedTableHead(props) {
         >
           <Checkbox
             color="primary"
+            id="head"
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}

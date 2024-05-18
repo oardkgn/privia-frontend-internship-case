@@ -5,15 +5,10 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TablePagination,
-  TableFooter,
   TableRow,
-  Pagination,
   Avatar,
-  Stack,
   Paper,
   Checkbox,
-  Typography,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -26,6 +21,7 @@ import { deleteSelectedUsers, deleteUser, getUsers } from "../../server/api";
 import { TableContext } from "../../context/TableContext";
 import { AlertContext } from "../../context/AlertContext";
 import DoubleCheck from "../DoubleCheckPopup";
+import TableFoot from "./TableFooter";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -56,8 +52,8 @@ function stableSort(array, comparator) {
 }
 
 export default function EnhancedTable() {
-  const {tableState, tableDispatch, getUsersData} = useContext(TableContext);
-  const {loading, setLoading} = useContext(AlertContext);
+  const { tableState, tableDispatch, getUsersData } = useContext(TableContext);
+  const { loading, setLoading } = useContext(AlertContext);
   const { showAlert } = useContext(AlertContext);
 
   const [order, setOrder] = useState("asc");
@@ -66,14 +62,13 @@ export default function EnhancedTable() {
   const [usersPerPage, setUsersPerPage] = useState(10);
   const [showUserModal, setShowUserModal] = useState(false);
 
-  const [editingUserId, setEditingUserId] = useState(null);
+  const [editingUser, setEditingUser] = useState({});
   const [users, setUsers] = useState([]);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorElId, setAnchorElId] = useState(null);
-  console.log(tableState);
 
-  const confirmedDelete = async(actionId) => {
+  const confirmedDelete = async (actionId) => {
     if (actionId) {
       try {
         const response = await deleteUser(actionId);
@@ -87,9 +82,7 @@ export default function EnhancedTable() {
   };
 
   const DCOpen = Boolean(anchorEl);
-  
-  
-  
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -99,10 +92,10 @@ export default function EnhancedTable() {
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelected = users.map((n) => n.id);
-      tableDispatch({ type: "SET_SELECTED_USERS", payload:newSelected  })
+      tableDispatch({ type: "SET_SELECTED_USERS", payload: newSelected });
       return;
     }
-    tableDispatch({ type: "SET_SELECTED_USERS", payload:[]  });
+    tableDispatch({ type: "SET_SELECTED_USERS", payload: [] });
   };
 
   const handleSelectClick = (event, id) => {
@@ -121,7 +114,7 @@ export default function EnhancedTable() {
         tableState.selectedUsers.slice(selectedIndex + 1)
       );
     }
-    tableDispatch({ type: "SET_SELECTED_USERS", payload:newSelected  })
+    tableDispatch({ type: "SET_SELECTED_USERS", payload: newSelected });
   };
 
   const handleChangePage = (event, newPage) => {
@@ -135,20 +128,16 @@ export default function EnhancedTable() {
     setUsersPerPage(parseInt(event.target.value, 10));
   };
 
-  const userDelDoubleCheck = async(event,id) => {
+  const userDelDoubleCheck = async (event, id) => {
     setAnchorEl(event.currentTarget);
-    setAnchorElId(id)
-  }
+    setAnchorElId(id);
+  };
 
   useEffect(() => {
     if (tableState.filteredUsers) {
-      setUsers(tableState.filteredUsers)
+      setUsers(tableState.filteredUsers);
     }
-  }, [tableState.filteredUsers])
-  
-
- 
-  
+  }, [tableState.filteredUsers]);
 
   const isSelected = (id) => tableState.selectedUsers.indexOf(id) !== -1;
 
@@ -165,13 +154,20 @@ export default function EnhancedTable() {
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
         {users.length != 0 ? (
-          <TableContainer sx={{ position:"relative"}}>
-            {loading && <Box sx={{ zIndex:10 ,position:"absolute", width:"100%", height:"100%", bgcolor:"black", opacity:"30%"}}></Box>}
-            <Table
-              
-              sx={{ minWidth: 1000,}}
-              aria-labelledby="tableTitle"
-            >
+          <TableContainer sx={{ position: "relative" }}>
+            {loading && (
+              <Box
+                sx={{
+                  zIndex: 10,
+                  position: "absolute",
+                  width: "100%",
+                  height: "100%",
+                  bgcolor: "black",
+                  opacity: "30%",
+                }}
+              ></Box>
+            )}
+            <Table sx={{ minWidth: 1000 }} aria-labelledby="tableTitle">
               <EnhancedTableHead
                 numSelected={tableState.selectedUsers.length}
                 order={order}
@@ -184,7 +180,6 @@ export default function EnhancedTable() {
               <TableBody>
                 {visibleusers.map((row, index) => {
                   const isItemSelected = isSelected(row.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
@@ -196,11 +191,9 @@ export default function EnhancedTable() {
                       <TableCell padding="checkbox">
                         <Checkbox
                           color="primary"
+                          id={`${index}`}
                           onClick={(event) => handleSelectClick(event, row.id)}
                           checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
                         />
                       </TableCell>
                       <TableCell>
@@ -217,55 +210,50 @@ export default function EnhancedTable() {
                       <TableCell>
                         {/* Edit profile button */}
                         <EditIcon
-                          onClick={() => {setShowUserModal(true);setEditingUserId(row.id)}}
+                          onClick={() => {
+                            setShowUserModal(true);
+                            setEditingUser({id:row.id,name:row.name,username:row.username,email:row.email,role:row.role,avatar:row.avatar});
+                          }}
                           sx={styles.tableCellIconStyle}
                         />
                         {/* Del profile button */}
-                        
-                        <DeleteIcon onClick={(event) => userDelDoubleCheck(event,row.id)} sx={styles.tableCellIconStyle} />
-                        <DoubleCheck open={DCOpen} id={anchorElId} confirmedDelete={confirmedDelete} anchorEl={anchorEl} />
+
+                        <DeleteIcon
+                          onClick={(event) => userDelDoubleCheck(event, row.id)}
+                          sx={styles.tableCellIconStyle}
+                        />
+                        <DoubleCheck
+                          open={DCOpen}
+                          id={anchorElId}
+                          confirmedDelete={confirmedDelete}
+                          anchorEl={anchorEl}
+                        />
                       </TableCell>
                     </TableRow>
                   );
                 })}
               </TableBody>
 
-              <TableFooter>
-                <TableRow>
-                  {users.length > 0 && (
-                    <TablePagination
-                      count={Math.ceil(users.length / usersPerPage)}
-                      page={page - 1}
-                      rowsPerPageOptions={[-1]}
-                      rowsPerPage={usersPerPage}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeusersPerPage}
-                      ActionsComponent={({ page, count }) => {
-                        return (
-                          <Stack spacing={2}>
-                            <Pagination
-                              count={count}
-                              page={page + 1}
-                              onChange={handleChangePage}
-                            />
-                          </Stack>
-                        );
-                      }}
-                    />
-                  )}
-                </TableRow>
-              </TableFooter>
+                <TableFoot page={page} setPage={setPage} users={users} usersPerPage={usersPerPage} handleChangePage={handleChangePage} handleChangeusersPerPage={handleChangeusersPerPage} />
             </Table>
           </TableContainer>
         ) : (
-          <Box sx={{padding:"20px", color:"#636363",fontFamily:"Montserrat", borderBottom:"1px solid gray",textAlign:"center"}}>
+          <Box
+            sx={{
+              padding: "20px",
+              color: "#636363",
+              fontFamily: "Montserrat",
+              borderBottom: "1px solid gray",
+              textAlign: "center",
+            }}
+          >
             No users found.
           </Box>
         )}
       </Paper>
       <UserModal
         type={"edit"}
-        id={editingUserId}
+        editingUser={editingUser}
         showUserModal={showUserModal}
         setShowUserModal={setShowUserModal}
       />

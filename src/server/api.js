@@ -26,18 +26,18 @@ export const createUser = async (payload) => {
 
 }
 
-export const getUser = async (id, payload) => {
-    try{
-        const response = await api.get(`/users/${id}`).then(res => res.data)
-        return response
-    }catch(e){
+// export const getUser = async (id, payload) => {
+//     try{
+//         const response = await api.get(`/users/${id}`).then(res => res.data)
+//         return response
+//     }catch(e){
 
-        const response = e.response.data
-        return response
-    }
+//         const response = e.response.data
+//         return response
+//     }
    
  
-}
+// }
 
 export const updateUser = async (id, payload) => {
     try{

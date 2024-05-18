@@ -59,6 +59,7 @@ function ToolsBar() {
             variant="standard"
           >
             <Input
+            id="search"
               placeholder="Search"
               disableUnderline
               onChange={(e) => {

@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   Modal,
-  TextField,
   Button,
   MenuItem,
   FormControl,
@@ -11,53 +10,37 @@ import {
   Select,
   FormControlLabel,
   CircularProgress,
-  Alert,
-  FormLabel,
   Input,
+  Typography,
 } from "@mui/material";
 import { styles } from "../CustomStyles";
-import { createUser, getUser, updateUser } from "../../server/api";
+import { createUser, updateUser } from "../../server/api";
 import { AlertContext } from "../../context/AlertContext";
 import { TableContext } from "../../context/TableContext";
+import { roles, profileImages } from "../utils";
 
 // Define some styles for the modal
 
-const UserModal = ({ showUserModal, setShowUserModal, type, id }) => {
+const UserModal = ({
+  showUserModal,
+  setShowUserModal,
+  type,
+  editingUser
+}) => {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
   const [avatar, setAvatar] = useState("");
+  
   const [loading, setLoading] = useState(false);
   const { showAlert } = useContext(AlertContext);
   const { getUsersData } = useContext(TableContext);
 
   const handleClose = () => {
     setShowUserModal(false);
-    if (type == "edit") {
-      setAvatar("");
-      setName("");
-      setUsername("");
-      setEmail("");
-      setRole("");
-    }
+    
   };
-
-  const roles = [
-    { value: "contributor", label: "Contributor" },
-    { value: "subscriber", label: "Subscriber" },
-    { value: "author", label: "Author" },
-    { value: "administrator", label: "Administrator" },
-  ];
-
-  const profileImages = [
-    { id: 1, src: "profile1.png" },
-    { id: 2, src: "profile2.png" },
-    { id: 3, src: "profile3.png" },
-    { id: 4, src: "profile4.png" },
-    { id: 5, src: "profile5.png" },
-    { id: 6, src: "profile6.png" },
-  ];
 
   const handleRoleChange = (event) => {
     setRole(event.target.value);
@@ -67,27 +50,18 @@ const UserModal = ({ showUserModal, setShowUserModal, type, id }) => {
     setAvatar(event.target.value);
   };
 
-  const getUpdatedUser = async () => {
+  useEffect(() => {
     if (showUserModal) {
-      try {
-        const response = await getUser(id);
-        setName(response.name);
-        setUsername(response.username);
-        setEmail(response.email);
-        setRole(response.role);
-        setAvatar(response.avatar);
-      } catch (error) {
-        console.error("Error creating user:", error);
+      if (type === "edit") {
+        setName(editingUser.name)
+        setUsername(editingUser.username)
+        setEmail(editingUser.email)
+        setAvatar(editingUser.avatar)
+        setRole(editingUser.role)
       }
     }
-  };
-
-  useEffect(() => {
-    if (type == "edit") {
-      getUpdatedUser();
-      setLoading(false);
-    }
-  }, [showUserModal]);
+  }, [showUserModal])
+  
 
   const handleSubmit = async (event) => {
     setLoading(true);
@@ -110,7 +84,7 @@ const UserModal = ({ showUserModal, setShowUserModal, type, id }) => {
       }
     } else {
       try {
-        const response = await updateUser(id, {
+        const response = await updateUser(editingUser.id, {
           name,
           username,
           email,
@@ -150,6 +124,8 @@ const UserModal = ({ showUserModal, setShowUserModal, type, id }) => {
               value={name}
               disableUnderline
               required
+              id="name"
+              name="name"
               placeholder="Full Name"
               sx={styles.usersModalInputStyle}
               onChange={(e) => setName(e.target.value)}
@@ -159,7 +135,9 @@ const UserModal = ({ showUserModal, setShowUserModal, type, id }) => {
               value={username}
               disableUnderline
               required
-              placeholder="username"
+              id="username"
+              name="username"
+              placeholder="Username"
               sx={styles.usersModalInputStyle}
               onChange={(e) => setUsername(e.target.value)}
               fullWidth
@@ -168,18 +146,20 @@ const UserModal = ({ showUserModal, setShowUserModal, type, id }) => {
               value={email}
               disableUnderline
               required
+              id="email"
+              name="email"
               placeholder="Email Address"
               sx={styles.usersModalInputStyle}
               onChange={(e) => setEmail(e.target.value)}
               fullWidth
               type="email"
             />
-
             <FormControl sx={{ outline: "none" }}>
               <Select
-                style={{}}
                 value={role}
                 required
+                id="role"
+                name="role"
                 onChange={handleRoleChange}
                 displayEmpty
                 sx={styles.usersModalInputStyle}
@@ -199,9 +179,8 @@ const UserModal = ({ showUserModal, setShowUserModal, type, id }) => {
                 ))}
               </Select>
             </FormControl>
-
             <FormControl sx={{ marginBottom: "30px" }} component="fieldset">
-              <label
+              <Typography
                 style={{
                   marginBottom: "14px",
                   color: "#636363",
@@ -209,11 +188,12 @@ const UserModal = ({ showUserModal, setShowUserModal, type, id }) => {
                 }}
               >
                 Select Avatar
-              </label>
+              </Typography>
               <RadioGroup
                 aria-label="image"
                 required
-                name="image"
+                id="avatar"
+                name="avatar"
                 sx={{
                   display: "flex",
                   flexDirection: "row",
@@ -225,13 +205,14 @@ const UserModal = ({ showUserModal, setShowUserModal, type, id }) => {
               >
                 {profileImages.map((image) => {
                   let boxShadow = "";
-                  if (image.src == avatar) {
+                  if (image.src === avatar) {
                     boxShadow = "rgba(58, 98, 243, 0.8) 0px 5px 15px";
                   } else {
                     boxShadow = "none";
                   }
                   return (
                     <FormControlLabel
+                      id={image.id}
                       key={image.id}
                       value={image.src}
                       control={<Radio />}
@@ -271,7 +252,10 @@ const UserModal = ({ showUserModal, setShowUserModal, type, id }) => {
               type="submit"
             >
               {loading ? (
-                <CircularProgress size={24} sx={{ paddingX: "10px", paddingY: "5px" }} />
+                <CircularProgress
+                  size={24}
+                  sx={{ paddingX: "10px", paddingY: "5px" }}
+                />
               ) : (
                 <p style={{ textTransform: "capitalize" }}>{type} user</p>
               )}

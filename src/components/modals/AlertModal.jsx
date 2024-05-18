@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Alert, Box } from "@mui/material";
-import { styles } from "./CustomStyles";
-import { AlertContext } from "../context/AlertContext";
+import { styles } from "../CustomStyles";
+import { AlertContext } from "../../context/AlertContext";
 
 const AlertModal = () => {
   const {alert, showAlert, hideAlert} = useContext(AlertContext);
