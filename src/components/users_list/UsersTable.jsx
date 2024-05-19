@@ -96,6 +96,8 @@ export default function EnhancedTable() {
     setPage(newPage);
   };
 
+
+
   const handleChangeusersPerPage = (event) => {
     setUsersPerPage(parseInt(event.target.value, 10));
   };
@@ -111,6 +113,10 @@ export default function EnhancedTable() {
       setUsers(tableState.filteredUsers);
     }
   }, [tableState.filteredUsers]);
+
+  useEffect(() => {
+    setPage(1)
+  }, [tableState.filteredBy]);
 
   const isSelected = (id) => tableState.selectedUsers.indexOf(id) !== -1;
 
