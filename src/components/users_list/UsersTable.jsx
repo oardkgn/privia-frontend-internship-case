@@ -168,7 +168,7 @@ export default function EnhancedTable() {
                       <TableCell>
                         <Avatar
                           alt="User Avatar"
-                          src={`../../public/images/${row.avatar}`}
+                          src={`/images/${row.avatar}`}
                           sx={{ borderRadius: "4px" }}
                         />
                       </TableCell>

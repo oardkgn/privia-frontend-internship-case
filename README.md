@@ -1,7 +1,8 @@
 
 # Privia Siber Savaş Akademisi Case
 
-Bu proje, MockAPI'den gelen verileri kullanarak bir kullanıcı tablosu oluşturur. Kullanıcılar, ad veya e-posta adresine göre aranabilir, tablo içerisinde silme ve düzenleme işlemleri yapılabilir ve seçili kullanıcılar toplu olarak silinebilir. Ayrıca, kullanıcıları rollerine göre ayıran bir navigasyon çubuğu (nav bar) bulunmaktadır. Kullanıcılar, rollerine tıklayarak o roldeki kullanıcılara erişebilirler. Kullanıcı ekleme özelliği de mevcuttur; kullanıcı ekleme butonuna tıklayarak yeni kullanıcılar ekleyebilirsiniz.
+Bu proje, MockAPI'den gelen verileri kullanarak bir kullanıcı tablosu oluşturur. Kullanıcılar, ad veya e-posta adresine göre aranabilir, tablo içerisinde silme ve düzenleme işlemleri yapılabilir ve seçili kullanıcılar toplu olarak silinebilir. 
+Ayrıca, kullanıcıları rollerine göre ayıran bir navigasyon çubuğu (nav bar) bulunmaktadır. Kullanıcılar, rollerine tıklayarak o roldeki kullanıcılara erişebilirler. Kullanıcı ekleme özelliği de mevcuttur; kullanıcı ekleme butonuna tıklayarak yeni kullanıcılar ekleyebilirsiniz.
 
 ## Kullanılan Teknolojiler
 
@@ -12,12 +13,13 @@ Bu proje, MockAPI'den gelen verileri kullanarak bir kullanıcı tablosu oluştur
 
 Uygulamanın demo versiyonuna aşağıdaki linkten ulaşabilirsiniz:
 
-[https://siber-savas-akademisi-case.vercel.app/](https://siber-savas-akademisi-case.vercel.app/)
+[https://privia-frontend-internship-case.vercel.app/](https://privia-frontend-internship-case.vercel.app/)
 
 ## Ekran Görüntüleri
 
 
 ![Uygulama Ekran Görüntüsü](https://private-user-images.githubusercontent.com/115845068/331865604-866d53ca-83e3-40c4-83d3-58dab7c6f7c2.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTYxMTYzNDEsIm5iZiI6MTcxNjExNjA0MSwicGF0aCI6Ii8xMTU4NDUwNjgvMzMxODY1NjA0LTg2NmQ1M2NhLTgzZTMtNDBjNC04M2QzLTU4ZGFiN2M2ZjdjMi5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTE5JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUxOVQxMDU0MDFaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT01MTNjYTEyNjM2MWY3N2E0NGNiYzU2ZDU1NjZjNTVkNDU1YmVlZTZkOTEzNTY0Zjc1NTZkY2JmYzRkMTIyMTA0JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.5aZUMyjXPsnZTiEmlg3tWGz_ZQnN8PDkVhtBeOO0xGo)
+
 ![Uygulama Ekran Görüntüsü](https://private-user-images.githubusercontent.com/115845068/331865602-d94305ba-f540-47a3-a02a-3405d309931b.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTYxMTYzNDEsIm5iZiI6MTcxNjExNjA0MSwicGF0aCI6Ii8xMTU4NDUwNjgvMzMxODY1NjAyLWQ5NDMwNWJhLWY1NDAtNDdhMy1hMDJhLTM0MDVkMzA5OTMxYi5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTE5JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUxOVQxMDU0MDFaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT00M2VkZTc2ZWIwNjc1Yzg1ZTEwNDk5OTg0YTZlMTAyNzEzZDU4MjIyMjEzYmM5OWMyNWNlZWQ4ZjE4Y2E2NzRkJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.jkTHRZfg7y3-VryxT6UBoCKWnxLO4mn4h0adEOF7B_Q)
 
 
