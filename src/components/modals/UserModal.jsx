@@ -19,8 +19,6 @@ import { AlertContext } from "../../context/AlertContext";
 import { TableContext } from "../../context/TableContext";
 import { roles, profileImages } from "../utils";
 
-// Define some styles for the modal
-
 const UserModal = ({
   showUserModal,
   setShowUserModal,
@@ -38,8 +36,7 @@ const UserModal = ({
   const { getUsersData } = useContext(TableContext);
 
   const handleClose = () => {
-    setShowUserModal(false);
-    
+    setShowUserModal(false);  
   };
 
   const handleRoleChange = (event) => {

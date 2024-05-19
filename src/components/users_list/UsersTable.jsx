@@ -14,7 +14,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import EnhancedTableHead from "./TableHead";
 import { styles } from "../CustomStyles";
-import { capitalizeFirstLetter } from "../utils";
+import { capitalizeFirstLetter, descendingComparator, getComparator, stableSort } from "../utils";
 import UserModal from "../modals/UserModal";
 import { useEffect } from "react";
 import { deleteSelectedUsers, deleteUser, getUsers } from "../../server/api";
@@ -22,34 +22,6 @@ import { TableContext } from "../../context/TableContext";
 import { AlertContext } from "../../context/AlertContext";
 import DoubleCheck from "../DoubleCheckPopup";
 import TableFoot from "./TableFooter";
-
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
 
 export default function EnhancedTable() {
   const { tableState, tableDispatch, getUsersData } = useContext(TableContext);
@@ -66,6 +38,7 @@ export default function EnhancedTable() {
   const [users, setUsers] = useState([]);
 
   const [anchorEl, setAnchorEl] = useState(null);
+  const DCOpen = Boolean(anchorEl);
   const [anchorElId, setAnchorElId] = useState(null);
 
   const confirmedDelete = async (actionId) => {
@@ -81,8 +54,7 @@ export default function EnhancedTable() {
     setAnchorEl(null);
   };
 
-  const DCOpen = Boolean(anchorEl);
-
+  
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -128,6 +100,7 @@ export default function EnhancedTable() {
     setUsersPerPage(parseInt(event.target.value, 10));
   };
 
+  // delete double check pop ups
   const userDelDoubleCheck = async (event, id) => {
     setAnchorEl(event.currentTarget);
     setAnchorElId(id);
@@ -155,17 +128,13 @@ export default function EnhancedTable() {
       <Paper sx={{ width: "100%", mb: 2 }}>
         {users.length != 0 ? (
           <TableContainer sx={{ position: "relative" }}>
+            {/* loading box */}
             {loading && (
               <Box
-                sx={{
-                  zIndex: 10,
-                  position: "absolute",
-                  width: "100%",
-                  height: "100%",
-                  bgcolor: "black",
-                  opacity: "30%",
-                }}
-              ></Box>
+                sx={styles.loadingBoxStyle}
+              >
+                Please wait... Users has been deleting.
+              </Box>
             )}
             <Table sx={{ minWidth: 1000 }} aria-labelledby="tableTitle">
               <EnhancedTableHead
@@ -233,7 +202,7 @@ export default function EnhancedTable() {
                   );
                 })}
               </TableBody>
-
+                {/* pagination */}
                 <TableFoot page={page} setPage={setPage} users={users} usersPerPage={usersPerPage} handleChangePage={handleChangePage} handleChangeusersPerPage={handleChangeusersPerPage} />
             </Table>
           </TableContainer>

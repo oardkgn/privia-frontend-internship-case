@@ -4,7 +4,11 @@ export const styles = {
     width: "100%",
     borderRadius: 1,
     marginTop: 1,
+    minWidth:"360px"
   },
+
+  // header styles
+
   headerContainerStyle: {
     display: "flex",
     alignItems: "center",
@@ -15,10 +19,17 @@ export const styles = {
     paddingY: "12px",
     borderBottom: "2px solid #EEEEEE",
     flexWrap: "wrap",
+    "@media (max-width: 850px)": {
+      paddingLeft:"0px",
+    },
   },
   headerLeftInnerboxStyle: {
     display: "flex",
     marginRight:"auto",
+    "@media (max-width: 850px)": {
+      marginLeft:"14px",
+    },
+    
     alignItems: "center",
     gap: 1,
     flex: "0 1 auto",
@@ -75,6 +86,9 @@ export const styles = {
     lineHeight: 1.5,
     whiteSpace: "nowrap",
   },
+
+  // toolsbar styles
+
   toolsBarContainerStyle: {
     display: "flex",
     margin: "20px 18px",
@@ -128,6 +142,9 @@ export const styles = {
     height: "30px",
     marginRight: "4px",
   },
+
+  //table styles 
+
   tableCellStyle: {
     fontWeight: "600",
     padding: "0",
@@ -150,6 +167,7 @@ export const styles = {
       borderRadius: "4px",
     },
   },
+  //user modal styles
 
   usersModalContainerStyle: {
     display: "flex",
@@ -178,14 +196,7 @@ export const styles = {
     "& fieldset": { border: "none" },
   },
 
-  alertBoxStyle: {
-    position: "fixed",
-    bottom: "20px",
-    right: "20px",
-    width: "500px",
-    textAlign: "center",
-    zIndex: "9999",
-  },
+  // double check modal styles
   DCcancelButtonStyle: {
     backgroundColor: "rgb(68, 184, 39, 0.4)",
     color: "#44b827",
@@ -205,10 +216,32 @@ export const styles = {
     alignItems: "center",
     gap: "4px",
     textTransform: "capitalize",
-
+    
     "&:hover": {
       backgroundColor: "rgb(224, 40, 40, 0.8)",
       color: "#f5c1c1",
     },
+  },
+  alertBoxStyle: {
+    position: "fixed",
+    bottom: "20px",
+    right: "20px",
+    width: "500px",
+    textAlign: "center",
+    zIndex: "9999",
+  },
+  loadingBoxStyle: {
+    zIndex: 10,
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    bgcolor: "black",
+    opacity: "50%",
+    color:"white",
+    display:"flex",
+    justifyContent:"center",
+    fontWeight:300,
+    fontSize:"20px",
+    alignItems: "center",
   },
 };

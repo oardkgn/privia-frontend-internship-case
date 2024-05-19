@@ -61,7 +61,7 @@ export const theme = createTheme({
         paper: {
           padding: "14px",
           borderRadius:"5px",
-          boxShadow:"rgba(0, 0, 0, 0.24) 0px 3px 8px !important",
+          boxShadow:"rgba(100, 100, 100, 0.24) 0px 3px 8px!important",
           fontFamily: "Montserrat",
         },
       },
