@@ -1,5 +1,6 @@
 import { createContext, useEffect, useReducer, useState } from "react";
-import { getUsers } from "../server/api";
+//import { getUsers } from "../server/api";
+import { usersData } from "../data/usersApi";
 
 export const TableContext = createContext();
 
@@ -35,9 +36,9 @@ const TableContextProvider = ({ children }) => {
   const [tableState, tableDispatch] = useReducer(reducer, initialState);
 
   const getUsersData = async () => {
-    const users = await getUsers();
-    tableDispatch({ type: "SET_USERS", payload: users.data });
-    getFilteredData(users.data);
+    //const users = await getUsers();
+    tableDispatch({ type: "SET_USERS", payload: usersData });
+    getFilteredData(usersData);
   };
 
   useEffect(() => {

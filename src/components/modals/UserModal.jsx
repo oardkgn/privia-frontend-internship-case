@@ -14,7 +14,10 @@ import {
   Typography,
 } from "@mui/material";
 import { styles } from "../CustomStyles";
-import { createUser, updateUser } from "../../server/api";
+
+//import { createUser, updateUser } from "../../server/api";
+import { createUser, updateUser } from "../../data/usersApi";
+
 import { AlertContext } from "../../context/AlertContext";
 import { TableContext } from "../../context/TableContext";
 import { roles, profileImages } from "../utils";
@@ -120,6 +123,7 @@ const UserModal = ({
             <Input
               value={name}
               disableUnderline
+              autoComplete="false"
               required
               id="name"
               name="name"
@@ -131,6 +135,7 @@ const UserModal = ({
             <Input
               value={username}
               disableUnderline
+              autoComplete="false"
               required
               id="username"
               name="username"
@@ -142,6 +147,7 @@ const UserModal = ({
             <Input
               value={email}
               disableUnderline
+              autoComplete="false"
               required
               id="email"
               name="email"

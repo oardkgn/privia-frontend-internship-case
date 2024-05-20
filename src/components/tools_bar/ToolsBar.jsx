@@ -7,7 +7,10 @@ import Input from "@mui/material/Input";
 import Text from "@mui/material/Typography";
 import { styles } from "../CustomStyles";
 import { TableContext } from "../../context/TableContext";
-import { deleteSelectedUsers } from "../../server/api";
+
+//import { deleteSelectedUsers } from "../../server/api";
+import { deleteUsers } from "../../data/usersApi";
+
 import { AlertContext } from "../../context/AlertContext";
 import DoubleCheck from "../DoubleCheckPopup";
 import { useEffect } from "react";
@@ -25,7 +28,7 @@ function ToolsBar() {
       setAnchorEl(null);
       setLoading(true);
       try {
-        const response = await deleteSelectedUsers(tableState.selectedUsers);
+        const response = await deleteUsers(tableState.selectedUsers);
         showAlert("success", "Users deleted successfully.");
         getUsersData();
         tableDispatch({ type: "SET_SELECTED_USERS", payload: [] });

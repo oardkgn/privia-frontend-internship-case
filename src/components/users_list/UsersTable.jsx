@@ -17,7 +17,10 @@ import { styles } from "../CustomStyles";
 import { capitalizeFirstLetter, descendingComparator, getComparator, stableSort } from "../utils";
 import UserModal from "../modals/UserModal";
 import { useEffect } from "react";
-import { deleteSelectedUsers, deleteUser, getUsers } from "../../server/api";
+
+//import { deleteUser } from "../../server/api";
+import { deleteUser } from "../../data/usersApi";
+
 import { TableContext } from "../../context/TableContext";
 import { AlertContext } from "../../context/AlertContext";
 import DoubleCheck from "../DoubleCheckPopup";
